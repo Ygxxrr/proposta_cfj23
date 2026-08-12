@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Proposta — Novo site do Colégio Franciscano João XXIII</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,450;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#2678b0;
+    --blue-deep:#1c5c8c;
+    --turq:#18b8b0;
+    --pink:#f26f9d;
+    --white:#ffffff;
+    --paper:#f6fafc;
+    --ink:#1c2333;
+    --ink-soft:#5b6472;
+    --line:rgba(28,35,51,0.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter',sans-serif; color:var(--ink); background:var(--white); -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative;}
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:600; letter-spacing:-0.01em;}
+  .eyebrow{font-size:0.7rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase;}
+  section{position:relative; padding:5.5rem 8vw; z-index:1;}
+  @media (max-width:720px){ section{padding:3.6rem 6vw;} }
+  @media (max-width:420px){ section{padding:3rem 5.5vw;} }
+
+  .blob{position:fixed; border-radius:50%; filter:blur(70px); opacity:0.16; z-index:0; pointer-events:none; animation:drift 22s ease-in-out infinite alternate; will-change:transform;}
+  .blob-blue{width:420px; height:420px; background:var(--blue); top:-120px; left:-100px;}
+  .blob-turq{width:380px; height:380px; background:var(--turq); top:40%; right:-160px; animation-duration:26s; animation-delay:-6s;}
+  .blob-pink{width:340px; height:340px; background:var(--pink); bottom:-140px; left:20%; animation-duration:19s; animation-delay:-3s;}
+  @keyframes drift{ from{transform:translate(0,0) scale(1);} to{transform:translate(40px,-30px) scale(1.08);} }
+  @media (prefers-reduced-motion:reduce){ .blob{animation:none;} }
+  /* em telas pequenas, alguns navegadores renderizam o blur mal (vira uma mancha sólida escura) — melhor ocultar */
+  @media (max-width:760px){ .blob{display:none;} }
+
+  .topbar{position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--blue),var(--turq),var(--pink)); width:0%; z-index:60; transition:width 0.1s linear;}
+  .rail{position:fixed; top:14px; left:1.2rem; z-index:50; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); font-weight:700; pointer-events:none; display:flex; align-items:center; gap:0.4rem;}
+  .rail .dot{width:6px; height:6px; border-radius:50%; background:var(--pink); animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .rail span.n{color:var(--blue);}
+  @media (max-width:480px){ .rail{font-size:0.58rem; top:10px;} }
+
+  /* TICKER */
+  .ticker-wrap{background:var(--ink); color:var(--white); overflow:hidden; padding:0.6rem 0; position:relative; z-index:2;}
+  .ticker{display:flex; white-space:nowrap; width:max-content; animation:ticker 26s linear infinite;}
+  .ticker span{font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; padding:0 1.1rem; display:flex; align-items:center; gap:1.1rem;}
+  .ticker span::after{content:'•'; color:var(--turq); margin-left:1.1rem;}
+  @keyframes ticker{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @media (prefers-reduced-motion:reduce){ .ticker{animation:none;} }
+
+  /* HERO */
+  .hero{min-height:92vh; min-height:92svh; display:flex; flex-direction:column; justify-content:flex-end; padding-bottom:3.6rem; color:var(--white);
+    background-color:var(--blue-deep);
+    background-image:linear-gradient(195deg, rgba(38,120,176,0.30) 0%, rgba(24,184,176,0.28) 40%, rgba(19,63,95,0.93) 100%), url('https://cfj23.com/wp-content/uploads/2025/01/016-scaled.jpg');
+    background-size:cover; background-position:center;}
+  .hero-top{position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; padding:1.3rem 8vw; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; opacity:0.92;}
+  .hero-top img{height:30px; filter:brightness(0) invert(1); opacity:0.95; animation:fadeIn 1s ease both;}
+  .hero .eyebrow{color:var(--turq); margin-bottom:1.1rem; opacity:0; animation:fadeUp 0.7s ease 0.15s forwards;}
+  .hero h1{font-size:clamp(2rem, 6.2vw, 4.2rem); line-height:1.08; max-width:17ch; font-weight:600; overflow:hidden;}
+  .hero h1 .w{display:inline-block; opacity:0; transform:translateY(100%); animation:wordUp 0.7s cubic-bezier(.22,1,.36,1) forwards;}
+  .hero p.sub{margin-top:1.3rem; max-width:38ch; font-size:1rem; line-height:1.55; color:rgba(255,255,255,0.88); font-weight:400; opacity:0; animation:fadeUp 0.7s ease 0.9s forwards;}
+  .hero-meta{display:grid; grid-template-columns:repeat(4,auto); gap:1.8rem; margin-top:2.2rem; border-top:1px solid rgba(255,255,255,0.28); padding-top:1.1rem; opacity:0; animation:fadeUp 0.7s ease 1.1s forwards;}
+  @media (max-width:720px){ .hero-meta{grid-template-columns:repeat(2,1fr); gap:1.2rem 1.6rem;} }
+  .hero-meta div{font-size:0.76rem;}
+  .hero-meta b{display:block; font-family:'Fraunces',serif; font-size:1rem; font-weight:600; color:var(--turq);}
+  .hero-meta span{opacity:0.8;}
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+  @keyframes wordUp{ to{opacity:1; transform:translateY(0);} }
+  @media (prefers-reduced-motion:reduce){ .hero h1 .w, .hero .eyebrow, .hero p.sub, .hero-meta{animation:none; opacity:1; transform:none;} }
+
+  .sec-head{max-width:56ch; margin-bottom:2.6rem;}
+  .sec-head .eyebrow{color:var(--blue); margin-bottom:0.8rem;}
+  .sec-head h2{font-size:clamp(1.5rem,4.2vw,2.3rem); line-height:1.18;}
+
+  /* 01 CENÁRIO — cartas com letra */
+  .diag{display:grid; grid-template-columns:0.8fr 1fr; gap:3rem; align-items:center;}
+  @media (max-width:860px){ .diag{grid-template-columns:1fr; gap:2.4rem;} }
+  .phone{width:min(230px, 64vw); margin:0 auto; aspect-ratio:9/18.5; border-radius:1.7rem; border:6px solid var(--ink); background:var(--white); position:relative; overflow:hidden; box-shadow:0 24px 50px -18px rgba(28,35,51,0.28);}
+  .phone .notch{position:absolute; top:0; left:50%; transform:translateX(-50%); width:38%; height:16px; background:var(--ink); border-radius:0 0 10px 10px; z-index:3;}
+  .broken-menu{padding:1.6rem 0.4rem 0.4rem; font-size:0.54rem; line-height:1.8; color:#334; white-space:nowrap;}
+  .broken-menu .row{display:flex; gap:0.32rem; overflow:hidden;}
+  .broken-menu .row span{background:#eaf3fa; color:var(--blue-deep); padding:0.13rem 0.34rem; border-radius:2px; flex-shrink:0;}
+  .broken-menu .row.overflow span:last-child{opacity:0.3;}
+  .broken-body{padding:0.6rem 0.7rem 0; font-size:0.64rem; line-height:1.35; color:#556;}
+  .broken-body strong{font-size:1.15rem; display:block; line-height:1.05; margin-bottom:0.3rem; color:var(--ink); word-break:break-word;}
+  .tag-callout{position:absolute; font-size:0.56rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; background:var(--pink); color:var(--white); padding:0.3rem 0.5rem; border-radius:3px; z-index:4; animation:wiggle 3s ease-in-out infinite;}
+  .tag1{top:13%; right:-4%;}
+  .tag2{bottom:26%; left:-4%; text-align:right; animation-delay:1.5s;}
+  @media (max-width:860px){ .tag1{right:3%;} .tag2{left:3%;} }
+  @keyframes wiggle{ 0%,100%{transform:rotate(0);} 50%{transform:rotate(-3deg);} }
+  @media (prefers-reduced-motion:reduce){ .tag-callout{animation:none;} }
+
+  /* prévia do novo site dentro do celular */
+  .preview-nav{display:flex; align-items:center; justify-content:space-between; padding:1.7rem 0.7rem 0.6rem;}
+  .preview-logo{font-family:'Fraunces',serif; font-weight:700; font-size:0.72rem; color:var(--blue-deep);}
+  .preview-menu{display:flex; flex-direction:column; gap:3px;}
+  .preview-menu span{width:14px; height:2px; background:var(--blue-deep); border-radius:2px;}
+  .preview-hero{margin:0 0.55rem; border-radius:0.8rem; padding:1.1rem 0.8rem 1.3rem; background:linear-gradient(150deg,var(--blue) 0%,var(--turq) 100%); color:var(--white); position:relative; overflow:hidden;}
+  .preview-badge{display:inline-block; font-size:0.5rem; font-weight:700; letter-spacing:0.08em; background:rgba(255,255,255,0.22); padding:0.2rem 0.45rem; border-radius:999px; margin-bottom:0.5rem;}
+  .preview-hero h4{font-family:'Fraunces',serif; font-size:0.92rem; line-height:1.2; font-weight:600; margin-bottom:0.35rem;}
+  .preview-hero p{font-size:0.58rem; opacity:0.9; margin-bottom:0.7rem;}
+  .preview-btn{display:inline-block; background:var(--white); color:var(--blue-deep); font-size:0.56rem; font-weight:700; padding:0.35rem 0.7rem; border-radius:999px;}
+  .preview-cards{display:grid; grid-template-columns:repeat(2,1fr); gap:0.4rem; margin:0.7rem 0.55rem 0;}
+  .preview-cards .pc{height:2.2rem; border-radius:0.5rem; background:var(--paper); border:1px solid var(--line); position:relative; overflow:hidden;}
+  .preview-cards .pc::before{content:''; position:absolute; left:0.35rem; top:0.35rem; width:55%; height:5px; border-radius:3px; background:var(--turq); opacity:0.55;}
+  .preview-cards .pc::after{content:''; position:absolute; left:0.35rem; top:0.9rem; width:75%; height:4px; border-radius:3px; background:var(--line);}
+  .preview-cards .pc:nth-child(2)::before{background:var(--pink);}
+  .diag-list{list-style:none;}
+  .diag-list li{display:flex; gap:1rem; padding:1.15rem 0; border-bottom:1px solid var(--line);}
+  .diag-list li:first-child{padding-top:0;}
+  .diag-list .letter{font-family:'Fraunces',serif; font-weight:700; color:var(--pink); font-size:1.7rem; line-height:1; flex-shrink:0; width:1.6rem;}
+  .diag-list li:nth-child(2) .letter{color:var(--turq);}
+  .diag-list li:nth-child(3) .letter{color:var(--blue);}
+  .diag-list h3{font-size:1rem; margin-bottom:0.3rem;}
+  .diag-list p{font-size:0.9rem; color:var(--ink-soft); line-height:1.5;}
+
+  /* 02 WHY NOT WORDPRESS */
+  .why{background:var(--paper);}
+  .why-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1rem;}
+  @media (max-width:720px){ .why-grid{grid-template-columns:1fr;} }
+  .why-card{background:var(--white); border:1px solid var(--line); border-top:3px solid var(--blue); border-radius:10px; padding:1.7rem 1.5rem; transition:transform 0.35s ease, box-shadow 0.35s ease;}
+  .why-card:hover{transform:translateY(-6px); box-shadow:0 18px 34px -18px rgba(28,35,51,0.25);}
+  .why-card:nth-child(2){border-top-color:var(--turq);}
+  .why-card:nth-child(3){border-top-color:var(--pink);}
+  .why-card:nth-child(4){border-top-color:var(--blue-deep);}
+  .why-card .num{font-family:'Fraunces',serif; color:var(--blue); font-size:0.8rem; margin-bottom:0.85rem; display:block; font-weight:600;}
+  .why-card:nth-child(2) .num{color:var(--turq);}
+  .why-card:nth-child(3) .num{color:var(--pink);}
+  .why-card h3{font-size:1.05rem; margin-bottom:0.55rem; font-weight:600;}
+  .why-card p{font-size:0.88rem; line-height:1.6; color:var(--ink-soft);}
+
+  /* 03 ESCOPO */
+  .scope-list{list-style:none; max-width:62ch;}
+  .scope-list li{display:flex; justify-content:space-between; align-items:baseline; gap:1rem; padding:1.05rem 0; border-bottom:1px solid var(--line); font-size:1rem; transition:padding-left 0.3s ease;}
+  .scope-list li:hover{padding-left:0.5rem;}
+  .scope-list li .desc{color:var(--ink-soft); font-size:0.84rem; margin-top:0.28rem; font-family:'Inter',sans-serif;}
+  .scope-list li .left{flex:1;}
+  .scope-list li .mark{color:var(--turq); font-family:'Fraunces',serif; font-weight:600; flex-shrink:0;}
+
+  /* 04 CRONOGRAMA */
+  .timeline{max-width:64ch; position:relative; padding-left:1.6rem;}
+  .timeline::before{content:''; position:absolute; left:0; top:0.6rem; bottom:0.6rem; width:2px; background:var(--line);}
+  .timeline-fill{position:absolute; left:0; top:0.6rem; width:2px; background:linear-gradient(180deg,var(--blue),var(--turq),var(--pink)); height:0%; transition:height 0.2s ease-out;}
+  .t-item{display:grid; grid-template-columns:8rem 1fr; gap:1.3rem; padding:1.35rem 0 1.35rem 1.2rem; position:relative;}
+  @media (max-width:520px){ .t-item{grid-template-columns:1fr; gap:0.3rem;} }
+  .t-item::before{content:''; position:absolute; left:-5px; top:1.85rem; width:12px; height:12px; border-radius:50%; background:var(--white); border:2px solid var(--blue); box-shadow:0 0 0 4px var(--white); transition:background 0.3s ease, border-color 0.3s ease;}
+  .t-item.in::before{background:var(--turq); border-color:var(--turq);}
+  .t-item:last-child.in::before{background:var(--pink); border-color:var(--pink);}
+  .t-item .when{font-family:'Fraunces',serif; font-weight:600; font-size:0.94rem; color:var(--blue);}
+  .t-item h3{font-size:0.96rem; margin-bottom:0.3rem;}
+  .t-item p{font-size:0.85rem; color:var(--ink-soft); line-height:1.5;}
+  .t-item:last-child .when{color:var(--pink);}
+
+  /* 05 FICHA TÉCNICA */
+  .stats{background:var(--ink); color:var(--white);}
+  .stats .eyebrow{color:var(--turq);}
+  .stats .sec-head h2{color:var(--white);}
+  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.14); margin-bottom:2.6rem;}
+  @media (max-width:720px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
+  .stat{background:var(--ink); padding:1.8rem 1.4rem;}
+  .stat .val{font-family:'Fraunces',serif; font-size:clamp(1.6rem,3.4vw,2.3rem); font-weight:700; color:var(--turq);}
+  .stat:nth-child(2) .val{color:var(--pink);}
+  .stat:nth-child(3) .val{color:var(--blue);}
+  .stat:nth-child(4) .val{color:var(--turq);}
+  .stat .lbl{font-size:0.76rem; color:rgba(255,255,255,0.65); margin-top:0.4rem; line-height:1.4;}
+  .bio{max-width:62ch; font-size:0.98rem; line-height:1.7; color:rgba(255,255,255,0.85);}
+  .bio b{color:var(--white); font-weight:600;}
+  .bio-sign{margin-top:1.6rem; font-family:'Fraunces',serif; font-weight:600; color:var(--white); font-size:1rem;}
+  .bio-sign span{display:block; font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:400; color:rgba(255,255,255,0.6); margin-top:0.15rem;}
+
+  /* 06 INVESTIMENTO */
+  .invest{background:linear-gradient(120deg, var(--blue) 0%, var(--blue-deep) 55%, #123f61 100%); color:var(--white); text-align:center; overflow:hidden;}
+  .invest .sec-head{margin:0 auto 1.7rem; text-align:center;}
+  .invest .eyebrow{color:var(--turq);}
+  .price{font-family:'Fraunces',serif; font-size:clamp(2.6rem,10vw,5rem); font-weight:700; color:var(--white); line-height:1;}
+  .price-sub{margin-top:0.7rem; opacity:0.85; font-size:0.92rem; max-width:42ch; margin-left:auto; margin-right:auto;}
+  .includes{display:flex; flex-wrap:wrap; gap:0.7rem; justify-content:center; margin-top:2.1rem; max-width:56ch; margin-left:auto; margin-right:auto;}
+  .includes span{border:1px solid rgba(255,255,255,0.35); border-radius:999px; padding:0.45rem 1rem; font-size:0.76rem; transition:background 0.3s ease;}
+  .includes span:hover{background:rgba(255,255,255,0.14);}
+
+  /* 07 STATUS */
+  .status{text-align:center;}
+  .status h2{font-size:clamp(1.7rem,5vw,2.6rem); max-width:22ch; margin:0 auto 1.1rem;}
+  .status p{max-width:48ch; margin:0 auto; color:var(--ink-soft); font-size:0.98rem; line-height:1.65;}
+  .stamp{display:inline-flex; align-items:center; gap:0.6rem; margin-top:2.2rem; padding:0.7rem 1.4rem; border:1.5px solid var(--pink); border-radius:999px; font-size:0.76rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--pink);}
+  .stamp .ring{width:9px; height:9px; border-radius:50%; border:2px solid var(--pink); animation:pulse 2s ease-in-out infinite;}
+  .sign-row{margin-top:2.6rem; font-family:'Fraunces',serif; font-size:1.02rem; font-weight:600; color:var(--blue-deep);}
+  .sign-row span{display:block; font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:400; color:var(--ink-soft); margin-top:0.2rem;}
+  footer{padding:2rem 8vw; font-size:0.72rem; color:var(--ink-soft); border-top:1px solid var(--line); display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity 0.6s ease, transform 0.6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  .why-grid.reveal .why-card, .stats-grid.reveal .stat{opacity:0; transform:translateY(14px); transition:opacity 0.5s ease, transform 0.5s ease;}
+  .why-grid.reveal.in .why-card:nth-child(1), .stats-grid.reveal.in .stat:nth-child(1){transition-delay:0.05s;}
+  .why-grid.reveal.in .why-card:nth-child(2), .stats-grid.reveal.in .stat:nth-child(2){transition-delay:0.15s;}
+  .why-grid.reveal.in .why-card:nth-child(3), .stats-grid.reveal.in .stat:nth-child(3){transition-delay:0.25s;}
+  .why-grid.reveal.in .why-card:nth-child(4), .stats-grid.reveal.in .stat:nth-child(4){transition-delay:0.35s;}
+  .why-grid.reveal.in .why-card, .stats-grid.reveal.in .stat{opacity:1; transform:translateY(0);}
+  .diag-list.reveal li, .scope-list.reveal li{opacity:0; transform:translateX(-10px); transition:opacity 0.5s ease, transform 0.5s ease;}
+  .diag-list.reveal.in li, .scope-list.reveal.in li{opacity:1; transform:translateX(0);}
+  .diag-list.reveal.in li:nth-child(1){transition-delay:0.05s;}
+  .diag-list.reveal.in li:nth-child(2){transition-delay:0.15s;}
+  .diag-list.reveal.in li:nth-child(3){transition-delay:0.25s;}
+  .scope-list.reveal.in li:nth-child(1){transition-delay:0.04s;}
+  .scope-list.reveal.in li:nth-child(2){transition-delay:0.09s;}
+  .scope-list.reveal.in li:nth-child(3){transition-delay:0.14s;}
+  .scope-list.reveal.in li:nth-child(4){transition-delay:0.19s;}
+  .scope-list.reveal.in li:nth-child(5){transition-delay:0.24s;}
+  .scope-list.reveal.in li:nth-child(6){transition-delay:0.29s;}
+  .price.reveal{opacity:0; transform:scale(0.85); transition:opacity 0.6s ease, transform 0.6s ease;}
+  .price.reveal.in{opacity:1; transform:scale(1);}
+  @media (prefers-reduced-motion:reduce){
+    .reveal, .why-grid .why-card, .stats-grid .stat, .diag-list li, .scope-list li, .price{opacity:1 !important; transform:none !important; transition:none !important;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="blob blob-blue"></div>
+<div class="blob blob-turq"></div>
+<div class="blob blob-pink"></div>
+<div class="topbar" id="topbar"></div>
+<div class="rail"><span class="dot"></span><span class="n" id="railNum">00</span> · YADS × CFJ23</div>
+
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>EDUCAÇÃO INFANTIL</span><span>FUNDAMENTAL ANOS INICIAIS</span><span>FUNDAMENTAL ANOS FINAIS</span><span>ENSINO MÉDIO</span><span>FILOSOFIA FRANCISCANA</span><span>65 ANOS DE HISTÓRIA</span>
+    <span>EDUCAÇÃO INFANTIL</span><span>FUNDAMENTAL ANOS INICIAIS</span><span>FUNDAMENTAL ANOS FINAIS</span><span>ENSINO MÉDIO</span><span>FILOSOFIA FRANCISCANA</span><span>65 ANOS DE HISTÓRIA</span>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-top">
+    <img src="https://cfj23.com/wp-content/uploads/2025/08/logotipo.png" alt="Colégio Franciscano João XXIII">
+    <span>Proposta — 2026</span>
+  </div>
+  <div class="eyebrow">Proposta comercial · Site institucional</div>
+  <h1><span class="w" style="animation-delay:.05s">Um</span> <span class="w" style="animation-delay:.12s">site</span> <span class="w" style="animation-delay:.19s">à</span> <span class="w" style="animation-delay:.26s">altura</span> <span class="w" style="animation-delay:.33s">dos</span> <span class="w" style="animation-delay:.40s">próximos</span> <span class="w" style="animation-delay:.47s">65</span> <span class="w" style="animation-delay:.54s">anos.</span></h1>
+  <p class="sub">Rápido, bonito e funcionando perfeitamente em qualquer tela — pronto a tempo de abrir a campanha de matrículas e rematrículas com o pé direito.</p>
+  <div class="hero-meta">
+    <div><b>João</b><span>Preparado para</span></div>
+    <div><b>Ygor Matos</b><span>Preparado por — YADS</span></div>
+    <div><b>Setembro</b><span>Prazo de entrega</span></div>
+    <div><b>7 dias</b><span>Validade da proposta</span></div>
+  </div>
+</section>
+
+<section id="s1">
+  <div class="sec-head reveal">
+    <div class="eyebrow">A prévia</div>
+    <h2>Um gostinho de como fica o novo site.</h2>
+  </div>
+  <div class="diag">
+    <div class="reveal" style="position:relative;">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="preview-nav">
+          <span class="preview-logo">CFJ23</span>
+          <span class="preview-menu"><span></span><span></span><span></span></span>
+        </div>
+        <div class="preview-hero">
+          <span class="preview-badge">65 ANOS</span>
+          <h4>Filosofia Franciscana de Educar</h4>
+          <p>Educação Infantil ao Ensino Médio</p>
+          <span class="preview-btn">Matricule-se</span>
+        </div>
+        <div class="preview-cards">
+          <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pc"></div>
+        </div>
+        <div class="tag-callout tag1" style="background:var(--turq);">responsivo</div>
+        <div class="tag-callout tag2" style="background:var(--blue);">rápido</div>
+      </div>
+    </div>
+    <ul class="diag-list reveal">
+      <li>
+        <span class="letter">A</span>
+        <div><h3>100% responsivo desde o primeiro pixel</h3><p>Construído para celular, tablet e desktop ao mesmo tempo — não adaptado depois de pronto.</p></div>
+      </li>
+      <li>
+        <span class="letter">B</span>
+        <div><h3>Identidade visual do colégio em destaque</h3><p>Cores, tipografia e fotos reais do colégio, com um layout pensado especialmente para os 65 anos.</p></div>
+      </li>
+      <li>
+        <span class="letter">C</span>
+        <div><h3>Feito para converter matrícula</h3><p>Cada tela conduz o visitante até o botão de matrícula, sem ruído no caminho.</p></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="why" id="s2">
+  <div class="sec-head reveal">
+    <div class="eyebrow">A decisão de plataforma</div>
+    <h2>Por que este projeto não será feito em WordPress.</h2>
+  </div>
+  <div class="why-grid reveal">
+    <div class="why-card">
+      <span class="num">Liberdade criativa</span>
+      <h3>Sem ficar preso a um tema</h3>
+      <p>Construído do zero, o layout é 100% exclusivo do colégio — sem parecer "mais um site de WordPress", o que pesa na identidade num ano tão simbólico quanto os 65 anos.</p>
+    </div>
+    <div class="why-card">
+      <span class="num">Performance</span>
+      <h3>Carregamento mais rápido</h3>
+      <p>Sem plugins e código acumulado ao longo dos anos, o site abre mais rápido e se comporta melhor no celular — resolvendo exatamente o problema de hoje.</p>
+    </div>
+    <div class="why-card">
+      <span class="num">Segurança</span>
+      <h3>Mais estável no longo prazo</h3>
+      <p>Sem risco de plugins desatualizados quebrarem o site ou abrirem brechas — um problema recorrente em instalações WordPress mais antigas.</p>
+    </div>
+    <div class="why-card">
+      <span class="num">Autonomia mantida</span>
+      <h3>Painel de edição sob medida</h3>
+      <p>A equipe do colégio continua atualizando textos, fotos e informações sozinha — só que num painel mais simples e direto do que o WordPress costuma entregar.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="sec-head reveal">
+    <div class="eyebrow">Escopo do projeto</div>
+    <h2>O que está incluso.</h2>
+  </div>
+  <ul class="scope-list reveal">
+    <li><div class="left">Site institucional novo, responsivo<div class="desc">Celular, tablet e desktop — sem quebras</div></div><span class="mark">01</span></li>
+    <li><div class="left">Identidade visual exclusiva<div class="desc">Cores, fontes e layout com a cara do colégio</div></div><span class="mark">02</span></li>
+    <li><div class="left">Páginas de Educação Infantil ao Ensino Médio<div class="desc">Incluindo Cursos Extras e Contato</div></div><span class="mark">03</span></li>
+    <li><div class="left">Painel de edição próprio<div class="desc">Sem depender de WordPress</div></div><span class="mark">04</span></li>
+    <li><div class="left">Treinamento da equipe<div class="desc">Para atualizar textos, fotos e informações sozinha</div></div><span class="mark">05</span></li>
+    <li><div class="left">Otimização de velocidade e SEO básico<div class="desc">Para aparecer melhor no Google</div></div><span class="mark">06</span></li>
+  </ul>
+</section>
+
+<section id="s4">
+  <div class="sec-head reveal">
+    <div class="eyebrow">Cronograma</div>
+    <h2>Pronto a tempo da campanha de matrículas.</h2>
+  </div>
+  <div class="timeline" id="timeline">
+    <div class="timeline-fill" id="timelineFill"></div>
+    <div class="t-item">
+      <div class="when">Semana 1–2</div>
+      <div><h3>Kickoff e conteúdo</h3><p>Alinhamento de identidade visual, textos e estrutura das páginas com o colégio.</p></div>
+    </div>
+    <div class="t-item">
+      <div class="when">Semana 3–4</div>
+      <div><h3>Desenvolvimento</h3><p>Construção do site e testes em celular, tablet e desktop.</p></div>
+    </div>
+    <div class="t-item">
+      <div class="when">Início de setembro</div>
+      <div><h3>Ajustes e treinamento</h3><p>Revisão final e capacitação da equipe no painel de edição.</p></div>
+    </div>
+    <div class="t-item">
+      <div class="when">Setembro</div>
+      <div><h3>Site no ar</h3><p>Publicado antes do início da campanha de rematrícula.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" id="s5">
+  <div class="sec-head reveal">
+    <div class="eyebrow">Ficha técnica</div>
+    <h2>Quem vai construir o site.</h2>
+  </div>
+  <div class="stats-grid reveal">
+    <div class="stat"><div class="val" data-target="2024" data-mode="year">2024</div><div class="lbl">Criando sites profissionais desde</div></div>
+    <div class="stat"><div class="val" data-target="28" data-suffix="">0</div><div class="lbl">Sites criados até hoje</div></div>
+    <div class="stat"><div class="val" data-target="8" data-suffix="">0</div><div class="lbl">Clientes ativos sob gestão atualmente</div></div>
+    <div class="stat"><div class="val" data-target="35" data-suffix="+">0</div><div class="lbl">Clientes estruturados do zero — estratégia e execução</div></div>
+  </div>
+  <p class="bio">Atuo com <b>marketing digital desde 2021</b> e, desde <b>2024</b>, venho me dedicando também ao <b>desenvolvimento de sites</b>. Trabalhei <b>um ano na V4</b>, agência de performance, antes de sair para me dedicar 100% à minha própria operação, a <b>YADS</b>. Já são <b>28 sites criados</b> e mais de <b>35 clientes estruturados do zero</b> — da estratégia ao criativo. O mesmo cuidado que aplico em cada projeto vale para este site: sem tema genérico, sem pressa.</p>
+  <div class="bio-sign">Ygor Matos<span>YADS — Gestão de Tráfego e Desenvolvimento</span></div>
+</section>
+
+<section class="invest" id="s6">
+  <div class="sec-head reveal">
+    <div class="eyebrow">Investimento</div>
+    <h2>Projeto fechado, sem surpresas.</h2>
+  </div>
+  <div>
+    <div class="price reveal" id="price">R$ 0</div>
+    <p class="price-sub">Pagamento único pelo projeto completo — sem taxa de plugin, sem mensalidade de tema.</p>
+    <div class="includes">
+      <span>Site completo e responsivo</span>
+      <span>Painel de edição</span>
+      <span>Treinamento da equipe</span>
+      <span>Suporte pós-entrega</span>
+    </div>
+  </div>
+</section>
+
+<section class="status" id="s7">
+  <div class="eyebrow reveal" style="color:var(--pink); margin-bottom:0.8rem;">Status</div>
+  <h2 class="reveal">Proposta pronta. Aguardando seu retorno.</h2>
+  <p class="reveal">Essa proposta reúne o que conversamos sobre o site atual e o que o colégio precisa para os próximos 65 anos. Assim que for aprovada, já entramos com o kickoff e o alinhamento de conteúdo.</p>
+  <div class="reveal"><div class="stamp"><span class="ring"></span> Aguardando resposta — João</div></div>
+  <div class="sign-row reveal">Ygor Matos<span>YADS — Gestão de Tráfego e Desenvolvimento</span></div>
+</section>
+
+<footer>
+  <span>Proposta comercial — Colégio Franciscano João XXIII</span>
+  <span>YADS · 2026</span>
+</footer>
+
+<script>
+  const topbar = document.getElementById('topbar');
+  function updateTopbar(){
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    topbar.style.width = pct + '%';
+  }
+  document.addEventListener('scroll', updateTopbar, {passive:true});
+  updateTopbar();
+
+  const railNum = document.getElementById('railNum');
+  const sections = ['s1','s2','s3','s4','s5','s6','s7'].map(id => document.getElementById(id));
+  const railIo = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ const idx = sections.indexOf(e.target) + 1; railNum.textContent = String(idx).padStart(2,'0'); } });
+  }, {threshold:0.5});
+  sections.forEach(s => s && railIo.observe(s));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:0.15});
+  revealEls.forEach(el => io.observe(el));
+
+  function countUp(el, target, opts){
+    const start = performance.now();
+    const dur = opts.dur || 1100;
+    const prefix = opts.prefix || '';
+    const suffix = opts.suffix || '';
+    function step(now){
+      const t = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = Math.round(target * eased);
+      el.textContent = prefix + val.toLocaleString('pt-BR') + suffix;
+      if(t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const priceEl = document.getElementById('price');
+  let priceDone = false;
+  new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting && !priceDone){ priceDone = true; countUp(priceEl, 3000, {prefix:'R$ ', dur:1100}); }
+    });
+  }, {threshold:0.4}).observe(priceEl);
+
+  const statEls = document.querySelectorAll('.stat .val');
+  let statsDone = false;
+  new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting && !statsDone){
+        statsDone = true;
+        statEls.forEach(el => {
+          const mode = el.dataset.mode;
+          const target = parseInt(el.dataset.target, 10);
+          if(mode === 'year'){ el.textContent = target; return; }
+          countUp(el, target, {prefix:el.dataset.prefix||'', suffix:el.dataset.suffix||'', dur:1300});
+        });
+      }
+    });
+  }, {threshold:0.3}).observe(document.querySelector('.stats-grid'));
+
+  const tItems = document.querySelectorAll('.t-item');
+  const tIo = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:0.5});
+  tItems.forEach(el => tIo.observe(el));
+
+  const timeline = document.getElementById('timeline');
+  const timelineFill = document.getElementById('timelineFill');
+  function updateTimelineFill(){
+    const rect = timeline.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const total = rect.height;
+    const visibleTop = Math.min(Math.max(vh * 0.75 - rect.top, 0), total);
+    const pct = total > 0 ? (visibleTop / total) * 100 : 0;
+    timelineFill.style.height = pct + '%';
+  }
+  document.addEventListener('scroll', updateTimelineFill, {passive:true});
+  window.addEventListener('resize', updateTimelineFill);
+  updateTimelineFill();
+</script>
+
+</body>
+</html>
